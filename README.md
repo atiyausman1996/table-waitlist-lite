@@ -25,10 +25,22 @@ A simple restaurant waitlist prototype built with modern full-stack tools.
    ```
 
 2. Install dependencies:
+
+```bash
    npm install
 
+```
+
 3. Create a .env.local file with your MongoDB URI:
+
+```bash
    MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/waitlistDB?retryWrites=true&w=majority&tls=true
 
+```
+
 4. Run the app:
+
+```bash
    npm run dev
+
+```
