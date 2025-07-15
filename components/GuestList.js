@@ -1,10 +1,47 @@
 "use client";
+
+import { useState } from "react";
 import { seatGuest, removeGuest } from "@/lib/actions";
+import toast from "react-hot-toast";
 
 export default function GuestList({ guests }) {
+  const [loadingId, setLoadingId] = useState(null);
+  const [loadingAction, setLoadingAction] = useState(null);
+
+  const handleSeatGuest = async (id) => {
+    try {
+      setLoadingId(id);
+      setLoadingAction("seat");
+      await seatGuest(id);
+      toast.success("Guest seated!");
+    } catch (error) {
+      toast.error("Failed to seat guest");
+    } finally {
+      setLoadingId(null);
+      setLoadingAction(null);
+    }
+  };
+
+  const handleRemoveGuest = async (id) => {
+    try {
+      setLoadingId(id);
+      setLoadingAction("remove");
+      await removeGuest(id);
+      toast.success("Guest removed!");
+    } catch (error) {
+      toast.error("Failed to remove guest");
+    } finally {
+      setLoadingId(null);
+      setLoadingAction(null);
+    }
+  };
+
+  if (!guests || guests.length === 0) {
+    return <p className="text-gray-500 italic">No guests yet.</p>;
+  }
+
   return (
     <ul className="space-y-4">
-      {guests.length === 0 && <p>No guests yet</p>}
       {guests.map((guest) => (
         <li
           key={guest._id}
@@ -18,20 +55,30 @@ export default function GuestList({ guests }) {
           </div>
           <div className="space-x-2">
             <button
-              onClick={async () => {
-                await seatGuest(guest._id);
-              }}
-              className="bg-green-500 text-white px-3 py-1"
+              onClick={() => handleSeatGuest(guest._id)}
+              disabled={loadingId === guest._id}
+              className={`px-3 py-1 text-white ${
+                loadingId === guest._id && loadingAction === "seat"
+                  ? "bg-green-300"
+                  : "bg-green-500 hover:bg-green-600"
+              }`}
             >
-              Seat
+              {loadingId === guest._id && loadingAction === "seat"
+                ? "Seating..."
+                : "Seat"}
             </button>
             <button
-              onClick={async () => {
-                await removeGuest(guest._id);
-              }}
-              className="bg-red-500 text-white px-3 py-1"
+              onClick={() => handleRemoveGuest(guest._id)}
+              disabled={loadingId === guest._id}
+              className={`px-3 py-1 text-white ${
+                loadingId === guest._id && loadingAction === "remove"
+                  ? "bg-red-300"
+                  : "bg-red-500 hover:bg-red-600"
+              }`}
             >
-              Remove
+              {loadingId === guest._id && loadingAction === "remove"
+                ? "Removing..."
+                : "Remove"}
             </button>
           </div>
         </li>
