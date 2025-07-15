@@ -3,7 +3,13 @@ import GuestForm from "@/components/GuestForm";
 import GuestList from "@/components/GuestList";
 
 export default async function WaitlistPage() {
-  const guests = await getWaitlist();
+  let guests = [];
+
+  try {
+    guests = await getWaitlist();
+  } catch (error) {
+    console.error("Failed to load waitlist:", error);
+  }
 
   return (
     <div className="p-6 space-y-6">
