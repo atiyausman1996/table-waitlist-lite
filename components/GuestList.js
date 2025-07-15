@@ -45,19 +45,24 @@ export default function GuestList({ guests }) {
       {guests.map((guest) => (
         <li
           key={guest._id}
-          className="border p-4 flex justify-between items-center"
+          className="border p-4 rounded-md shadow-sm bg-white flex flex-col sm:flex-row sm:justify-between sm:items-center gap-y-2"
         >
-          <div>
-            <p>
+          {/* Guest Info */}
+          <div className="text-sm">
+            <p className="font-medium">
               {guest.name} • Party {guest.partySize}
             </p>
-            <small>{new Date(guest.timeAdded).toLocaleTimeString()}</small>
+            <p className="text-gray-500">
+              {new Date(guest.timeAdded).toLocaleTimeString()}
+            </p>
           </div>
-          <div className="space-x-2">
+
+          {/* Buttons */}
+          <div className="flex flex-wrap gap-2 sm:justify-end">
             <button
               onClick={() => handleSeatGuest(guest._id)}
               disabled={loadingId === guest._id}
-              className={`px-3 py-1 text-white ${
+              className={`px-3 py-1 text-sm text-white rounded ${
                 loadingId === guest._id && loadingAction === "seat"
                   ? "bg-green-300"
                   : "bg-green-500 hover:bg-green-600"
@@ -70,7 +75,7 @@ export default function GuestList({ guests }) {
             <button
               onClick={() => handleRemoveGuest(guest._id)}
               disabled={loadingId === guest._id}
-              className={`px-3 py-1 text-white ${
+              className={`px-3 py-1 text-sm text-white rounded ${
                 loadingId === guest._id && loadingAction === "remove"
                   ? "bg-red-300"
                   : "bg-red-500 hover:bg-red-600"
